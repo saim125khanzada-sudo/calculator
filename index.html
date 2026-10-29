@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-zinc-100 min-h-screen flex items-center justify-center p-4">
+
+  <div class="calculator-container w-full max-w-xl bg-zinc-900/90 border border-zinc-800 rounded-3xl p-5 md:p-6 shadow-2xl backdrop-blur-md">
+    
+    <!-- Top Header & Mode Toggles -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Scientific</span>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <!-- Angle Unit Toggle (DEG / RAD) -->
+        <button id="angle-toggle" class="mode-badge active text-xs font-semibold px-3 py-1.5 rounded-full border border-zinc-700 bg-zinc-800 hover:border-zinc-500 transition-all">
+          DEG
+        </button>
+        <!-- Memory Indicator -->
+        <span id="memory-indicator" class="text-xs font-bold text-amber-500/0 transition-opacity px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full">
+          M
+        </span>
+      </div>
+    </div>
+
+    <!-- Display Screen -->
+    <div class="bg-zinc-950 border border-zinc-800/80 rounded-2xl p-4 mb-5 text-right relative overflow-hidden shadow-inner min-h-[120px] flex flex-col justify-end">
+      <!-- Top Secondary Screen (History / Full Expression) -->
+      <div id="sub-display" class="text-zinc-500 text-sm font-mono h-6 overflow-x-auto whitespace-nowrap mb-1 flex items-center justify-end scrollbar-none">
+        0
+      </div>
+      <!-- Main Primary Screen -->
+      <div id="main-display" class="text-3xl md:text-4xl font-mono font-medium tracking-wide text-zinc-100 overflow-x-auto whitespace-nowrap scrollbar-none">
+        0
+      </div>
+    </div>
+
+    <!-- Keypad Grid -->
+    <div class="grid grid-cols-5 gap-2 md:gap-2.5">
+      
+      <!-- Row 1: Memory & Clear -->
+      <button onclick="clearAll()" class="btn btn-danger font-semibold">AC</button>
+      <button onclick="deleteLast()" class="btn btn-warning font-semibold">DEL</button>
+      <button onclick="handleMemory('MC')" class="btn btn-mem">MC</button>
+      <button onclick="handleMemory('MR')" class="btn btn-mem">MR</button>
+      <button onclick="handleMemory('M+')" class="btn btn-mem">M+</button>
+
+      <!-- Row 2: Trig & Scientific -->
+      <button onclick="appendFunction('sin')" class="btn btn-sci">sin</button>
+      <button onclick="appendFunction('cos')" class="btn btn-sci">cos</button>
+      <button onclick="appendFunction('tan')" class="btn btn-sci">tan</button>
+      <button onclick="handleMemory('M-')" class="btn btn-mem">M-</button>
+      <button onclick="appendOperator('/')" class="btn btn-op">÷</button>
+
+      <!-- Row 3: Inverse Trig & Log -->
+      <button onclick="appendFunction('asin')" class="btn btn-sci">sin⁻¹</button>
+      <button onclick="appendFunction('acos')" class="btn btn-sci">cos⁻¹</button>
+      <button onclick="appendFunction('atan')" class="btn btn-sci">tan⁻¹</button>
+      <button onclick="appendFunction('log')" class="btn btn-sci">log</button>
+      <button onclick="appendOperator('*')" class="btn btn-op">×</button>
+
+      <!-- Row 4: Powers & Roots -->
+      <button onclick="appendFunction('sqrt')" class="btn btn-sci">√</button>
+      <button onclick="appendFunction('cbrt')" class="btn btn-sci">∛</button>
+      <button onclick="appendPower()" class="btn btn-sci">xʸ</button>
+      <button onclick="appendFunction('ln')" class="btn btn-sci">ln</button>
+      <button onclick="appendOperator('-')" class="btn btn-op">−</button>
+
+      <!-- Row 5: Factorial, Constants & Numbers (7, 8, 9) -->
+      <button onclick="appendFact()" class="btn btn-sci">n!</button>
+      <button onclick="appendConstant('π')" class="btn btn-sci">π</button>
+      <button onclick="appendNumber('7')" class="btn btn-num">7</button>
+      <button onclick="appendNumber('8')" class="btn btn-num">8</button>
+      <button onclick="appendNumber('9')" class="btn btn-num">9</button>
+
+      <!-- Row 6: E, Parens & Numbers (4, 5, 6, +) -->
+      <button onclick="appendConstant('e')" class="btn btn-sci">e</button>
+      <button onclick="appendParen('(')" class="btn btn-sci">(</button>
+      <button onclick="appendNumber('4')" class="btn btn-num">4</button>
+      <button onclick="appendNumber('5')" class="btn btn-num">5</button>
+      <button onclick="appendNumber('6')" class="btn btn-num">6</button>
+
+      <!-- Row 7: Percent, Parens & Numbers (1, 2, 3) -->
+      <button onclick="appendPercent()" class="btn btn-sci">%</button>
+      <button onclick="appendParen(')')" class="btn btn-sci">)</button>
+      <button onclick="appendNumber('1')" class="btn btn-num">1</button>
+      <button onclick="appendNumber('2')" class="btn btn-num">2</button>
+      <button onclick="appendNumber('3')" class="btn btn-num">3</button>
+
+      <!-- Row 8: Plus, Negate, Zero, Dot, Equal -->
+      <button onclick="appendOperator('+')" class="btn btn-op">+</button>
+      <button onclick="toggleSign()" class="btn btn-num">±</button>
+      <button onclick="appendNumber('0')" class="btn btn-num">0</button>
+      <button onclick="appendDot()" class="btn btn-num">.</button>
+      <button onclick="calculateResult()" class="btn btn-accent font-bold">=</button>
+
+    </div>
+
+    <!-- Footer Note -->
+    <div class="mt-4 text-center text-xs text-zinc-600">
+      Supports full keyboard input • Press <kbd class="px-1.5 py-0.5 bg-zinc-800 rounded border border-zinc-700 text-zinc-400">Enter</kbd> to calculate
+    </div>
+  </div>
+
+  <!-- Custom Logic Script -->
+  <script src="script.js"></script>
+</body>
+</html>

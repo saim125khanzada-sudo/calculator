@@ -1,0 +1,47 @@
+/* Custom Scrollbar for Display */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Base Button Styles */
+.btn {
+  @apply relative flex items-center justify-center h-12 md:h-14 rounded-xl text-base md:text-lg select-none transition-all duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-zinc-600;
+}
+
+/* Button Variants (Dark & Charcoal Palette) */
+.btn-num {
+  @apply bg-zinc-800/90 text-zinc-100 hover:bg-zinc-700/80 border border-zinc-700/40 shadow-sm;
+}
+
+.btn-op {
+  @apply bg-zinc-700/60 text-amber-400 hover:bg-zinc-700 border border-zinc-600/40 font-medium;
+}
+
+.btn-sci {
+  @apply bg-zinc-800/40 text-zinc-300 hover:bg-zinc-700/50 border border-zinc-800 text-sm md:text-base;
+}
+
+.btn-mem {
+  @apply bg-zinc-900/80 text-amber-500/80 hover:text-amber-400 hover:bg-zinc-800 border border-zinc-800 text-xs md:text-sm font-semibold;
+}
+
+.btn-danger {
+  @apply bg-red-950/40 text-red-400 hover:bg-red-900/60 border border-red-900/50;
+}
+
+.btn-warning {
+  @apply bg-amber-950/40 text-amber-400 hover:bg-amber-900/60 border border-amber-900/50 text-xs md:text-sm;
+}
+
+.btn-accent {
+  @apply bg-amber-500 text-zinc-950 hover:bg-amber-400 shadow-lg shadow-amber-500/20 font-bold text-xl;
+}
+
+/* Toggle Badges */
+.mode-badge.active {
+  @apply bg-zinc-800 text-amber-400 border-zinc-600;
+}
